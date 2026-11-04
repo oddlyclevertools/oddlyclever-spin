@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- The desktop shell: a WinForms window around WebView2, showing the music server that it starts and stops.
+       .NET Framework 4.8 is part of Windows 10 and 11, so the exe needs no runtime download. -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>OddlyClever Spin</AssemblyName>
+    <RootNamespace>OddlyClever</RootNamespace>
+    <AssemblyTitle>OddlyClever Spin</AssemblyTitle>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4314.35" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+</Project>

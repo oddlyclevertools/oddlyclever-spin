@@ -1,0 +1,271 @@
+/* OddlyClever Music: the 5 themes, modes and motion tokens (DESIGN_SPEC section 2, CONTRACT_V2 C). Every theme colour lives here.
+   v2 direction: neutral flat chrome, one accent per theme, monochrome icons. Colour comes from the artwork only. */
+
+@font-face { font-family: "Inter"; src: url("fonts/InterVariable.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+
+/* --accent / --accent-2 are registered so a cover change morphs them inside Now Playing (A2). */
+@property --accent   { syntax: "<color>"; inherits: true; initial-value: #ff6b3d; }
+@property --accent-2 { syntax: "<color>"; inherits: true; initial-value: #ff6b3d; }
+
+:root {
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-inout: cubic-bezier(.65, 0, .35, 1);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --d-fast: 120ms; --d-med: 240ms; --d-slow: 420ms;
+  --dm: 1;
+  --tab-h: 56px; --mini-h: 64px; --top-h: 52px;
+  --safe-t: env(safe-area-inset-top, 0px); --safe-r: env(safe-area-inset-right, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px); --safe-l: env(safe-area-inset-left, 0px);
+  --side-w: 240px;
+  /* type scale (CONTRACT_V2 C): 32 / 24 / 18 / 15 / 13 / 12 */
+  --fs-1: 32px; --fs-2: 24px; --fs-3: 18px; --fs-4: 15px; --fs-5: 13px; --fs-6: 12px;
+  --track: -.02em;
+}
+html[data-motion="calm"] { --dm: .5; }
+html[data-motion="off"] { --dm: 0; }
+
+/* ---------- shared per theme: radii, weights, gaps. All themes use the bundled Inter. ---------- */
+html[data-theme] { --font-text: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif; --font-display: var(--font-text);
+  --r-pill: 999px; --blur: 0px; --sat: 1; --w-head: 700; --w-hero: 800; --gap: 20px; }
+html[data-fonts="system"] { --font-text: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif; }
+html[data-theme="night-market"] { --r: 12px; --r-sm: 8px; --r-tile: 8px; }
+html[data-theme="glasshouse"]   { --r: 16px; --r-sm: 10px; --r-tile: 10px; --blur: 28px; --sat: 1.5; --w-head: 650; --w-hero: 700; }
+html[data-theme="vinyl-club"]   { --r: 4px; --r-sm: 4px; --r-tile: 3px; --w-hero: 800; }
+html[data-theme="midnight-ink"] { --r: 0px; --r-sm: 6px; --r-tile: 2px; --w-head: 600; --w-hero: 600; }
+html[data-theme="sunset-tape"]  { --r: 20px; --r-sm: 12px; --r-tile: 14px; --w-head: 800; --w-hero: 800; --gap: 22px; }
+
+/* ---------- per mode. Neutral greys with a faint theme temperature; --t-accent is the one accent. ---------- */
+html[data-theme="night-market"][data-mode="dark"] { color-scheme: dark;
+  --bg: #0d0c0e; --bg-2: #121114; --panel: #161518; --raise: #201f23; --line: #2b292e;
+  --ink: #f4f1ee; --dim: #aca7a3; --mute: #7d7874;
+  --t-accent: #ff6b3d; --t-accent-ink: #1a0a04; --like: #ff6b3d;
+  --glass: rgb(22 21 24 / .92); --sh: 0 0 0; --sh-a: .5; --scrim: rgb(0 0 0 / .6); }
+html[data-theme="night-market"][data-mode="light"] { color-scheme: light;
+  --bg: #eeece9; --bg-2: #e6e3df; --panel: #ffffff; --raise: #f3f1ee; --line: #e2dfda;
+  --ink: #171513; --dim: #5d5853; --mute: #7f7973;
+  --t-accent: #c2410c; --t-accent-ink: #ffffff; --like: #c2410c;
+  --glass: rgb(255 255 255 / .94); --sh: 40 30 20; --sh-a: .12; --scrim: rgb(23 21 19 / .38); }
+
+html[data-theme="glasshouse"][data-mode="dark"] { color-scheme: dark;
+  --bg: #0a0c11; --bg-2: #10131a; --panel: #12151c; --raise: #1b1f28; --line: #272c37;
+  --ink: #eef1f7; --dim: #a5adbf; --mute: #767e91;
+  --t-accent: #93a9ff; --t-accent-ink: #0a1030; --like: #93a9ff;
+  --glass: rgb(24 28 38 / .58); --sh: 0 2 10; --sh-a: .5; --scrim: rgb(4 6 12 / .55); }
+html[data-theme="glasshouse"][data-mode="light"] { color-scheme: light;
+  --bg: #eceff5; --bg-2: #e3e7ef; --panel: #f7f8fb; --raise: #ffffff; --line: #d6dbe6;
+  --ink: #10131a; --dim: #4a5265; --mute: #697185;
+  --t-accent: #3b5bdb; --t-accent-ink: #ffffff; --like: #3b5bdb;
+  --glass: rgb(255 255 255 / .62); --sh: 30 45 90; --sh-a: .12; --scrim: rgb(16 19 26 / .3); }
+
+html[data-theme="vinyl-club"][data-mode="light"] { color-scheme: light;
+  --bg: #f3efe7; --bg-2: #ebe5da; --panel: #f3efe7; --raise: #e9e3d8; --line: #d9d1c3;
+  --ink: #1d1a16; --dim: #5a5348; --mute: #7a7265;
+  --t-accent: #a3470c; --t-accent-ink: #fffaf2; --like: #a3470c;
+  --glass: rgb(243 239 231 / .95); --sh: 60 40 15; --sh-a: .12; --scrim: rgb(29 26 22 / .4); }
+html[data-theme="vinyl-club"][data-mode="dark"] { color-scheme: dark;
+  --bg: #131210; --bg-2: #191714; --panel: #131210; --raise: #201d1a; --line: #2d2924;
+  --ink: #f2ece2; --dim: #b1a897; --mute: #81796b;
+  --t-accent: #e9a050; --t-accent-ink: #1e1205; --like: #e9a050;
+  --glass: rgb(19 18 16 / .95); --sh: 0 0 0; --sh-a: .55; --scrim: rgb(0 0 0 / .62); }
+
+/* Midnight Ink is dark only: fx.js always resolves data-mode="dark" for it. */
+html[data-theme="midnight-ink"] { color-scheme: dark;
+  --bg: #000000; --bg-2: #050506; --panel: #000000; --raise: #111113; --line: #202023;
+  --ink: #f5f5f7; --dim: #a1a1aa; --mute: #75757e;
+  --t-accent: #c6ff3d; --t-accent-ink: #0a0f00; --like: #c6ff3d;
+  --glass: rgb(0 0 0 / .94); --sh: 0 0 0; --sh-a: .6; --scrim: rgb(0 0 0 / .7); }
+
+html[data-theme="sunset-tape"][data-mode="dark"] { color-scheme: dark;
+  --bg: #110d13; --bg-2: #18131b; --panel: #18131b; --raise: #241c27; --line: #312735;
+  --ink: #fbf3f6; --dim: #bcacbb; --mute: #8a798d;
+  --t-accent: #ff5c93; --t-accent-ink: #2a0514; --like: #ff5c93;
+  --glass: rgb(24 19 27 / .94); --sh: 10 0 12; --sh-a: .5; --scrim: rgb(10 4 12 / .6); }
+html[data-theme="sunset-tape"][data-mode="light"] { color-scheme: light;
+  --bg: #f6efed; --bg-2: #efe6e3; --panel: #fffcfb; --raise: #f4ebe8; --line: #e9dcd8;
+  --ink: #1e1220; --dim: #604c63; --mute: #846d86;
+  --t-accent: #c81e5b; --t-accent-ink: #ffffff; --like: #c81e5b;
+  --glass: rgb(255 252 251 / .94); --sh: 90 30 50; --sh-a: .12; --scrim: rgb(30 18 32 / .36); }
+
+/* ---------- derived tokens (one place) ---------- */
+html[data-theme] {
+  --accent: var(--t-accent); --accent-2: var(--t-accent); --accent-ink: var(--t-accent-ink);
+  --glow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+  --shadow-1: 0 4px 14px rgb(var(--sh) / var(--sh-a));
+  --shadow-2: 0 18px 48px rgb(var(--sh) / var(--sh-a));
+  --hi: none;
+  --hot: var(--accent); --mint: var(--accent); --np: var(--bg-2); --display: var(--font-display);
+  /* legacy aurora tokens: the aurora is gone from the page, these only feed old fallbacks */
+  --aurora-1: var(--raise); --aurora-2: var(--raise); --aurora-3: var(--raise);
+}
+/* Album colours: the chrome accent never changes; inside Now Playing the accent follows the cover. */
+html[data-album="on"] .np, html[data-album="on"] .bar {
+  --accent: var(--album-accent, var(--t-accent)); --accent-2: var(--album-accent, var(--t-accent)); --accent-ink: var(--album-accent-ink, var(--t-accent-ink));
+  transition: --accent calc(700ms * var(--dm)) var(--ease-inout), --accent-2 calc(700ms * var(--dm)) var(--ease-inout); }
+html[data-album="off"] [data-cover-src] { --cv-a: initial; --cv-b: initial; --cv-c: initial; }
+
+/* ---------- motion levels ---------- */
+html[data-motion="off"] *, html[data-motion="off"] *::before, html[data-motion="off"] *::after {
+  animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+@media (prefers-reduced-motion: reduce) {
+  html[data-motion-src="os"] *, html[data-motion-src="os"] *::before, html[data-motion-src="os"] *::after { animation-duration: .001ms !important; }
+}
+
+/* ---------- page backdrop: flat. The "Animated background" setting now only drifts the Now Playing backdrop. ---------- */
+#fxAurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: var(--bg); }
+#fxAurora > i { display: none; }
+body:not(.playing) .np-bg i.fx-layer { animation-play-state: paused; }
+
+/* ---------- theme picker swatches (8.13): bg, panel, accent of each theme in the resolved mode ---------- */
+[data-theme-pick] .swatch { --s1: #0d0c0e; --s2: #ff6b3d; --s4: #161518; }
+[data-theme-pick="glasshouse"] .swatch { --s1: #0a0c11; --s2: #93a9ff; --s4: #1b1f28; }
+[data-theme-pick="vinyl-club"] .swatch { --s1: #131210; --s2: #e9a050; --s4: #201d1a; }
+[data-theme-pick="midnight-ink"] .swatch { --s1: #000000; --s2: #c6ff3d; --s4: #111113; }
+[data-theme-pick="sunset-tape"] .swatch { --s1: #110d13; --s2: #ff5c93; --s4: #241c27; }
+html[data-mode="light"] [data-theme-pick="night-market"] .swatch { --s1: #eeece9; --s2: #c2410c; --s4: #ffffff; }
+html[data-mode="light"] [data-theme-pick="glasshouse"] .swatch { --s1: #eceff5; --s2: #3b5bdb; --s4: #ffffff; }
+html[data-mode="light"] [data-theme-pick="vinyl-club"] .swatch { --s1: #f3efe7; --s2: #a3470c; --s4: #e9e3d8; }
+html[data-mode="light"] [data-theme-pick="sunset-tape"] .swatch { --s1: #f6efed; --s2: #c81e5b; --s4: #fffcfb; }
+
+/* ---------- per-theme personality (app.css styles the components; these are the theme twists) ---------- */
+
+/* Night Market (house look): the content sits on one calm rounded sheet; the sidebar, top bar and player rest on the page. */
+html[data-theme="night-market"][data-mode="light"] main { box-shadow: 0 0 0 1px var(--line); }
+
+/* Glasshouse: airy and soft; the only theme with frosted glass. The page runs under a floating frosted player. */
+html[data-theme="glasshouse"] main { background: transparent; }
+html[data-theme="glasshouse"] .side { background: var(--glass); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 6%, transparent); }
+@media (min-width: 1025px) {
+  html[data-theme="glasshouse"] main { grid-row: 2 / 4; padding-bottom: 128px; }
+  html[data-theme="glasshouse"] .bar { margin: 0 12px 12px; border-radius: 18px; background: var(--glass); z-index: 4;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 9%, transparent), var(--shadow-2); }
+  html[data-theme="glasshouse"] .app { grid-template-columns: var(--side-w) minmax(0, 1fr) auto; }
+}
+html[data-theme="glasshouse"] .bar, html[data-theme="glasshouse"] .gs-panel, html[data-theme="glasshouse"] .tabbar, html[data-theme="glasshouse"] .menu {
+  background: var(--glass); -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--sat)); backdrop-filter: blur(var(--blur)) saturate(var(--sat)); }
+html[data-theme="glasshouse"] nav#nav button.on { background: color-mix(in srgb, var(--ink) 10%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 8%, transparent); }
+html[data-theme="glasshouse"] .tile-art, html[data-theme="glasshouse"] .card .cv { box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 7%, transparent); }
+
+/* Vinyl Club: an editorial record-shop catalogue. Paper and ink, hairline rules, square corners, tight heavy type. */
+html[data-theme="vinyl-club"] .app { padding: 0; gap: 0; }
+html[data-theme="vinyl-club"] .side { border-right: 1px solid var(--line); border-radius: 0; }
+html[data-theme="vinyl-club"] .top { border-bottom: 1px solid var(--line); padding: 0 24px; }
+html[data-theme="vinyl-club"] main { border-radius: 0; }
+html[data-theme="vinyl-club"] .bar { border-top: 1px solid var(--line); }
+html[data-theme="vinyl-club"] section.shelf { border-top: 1px solid var(--ink); padding-top: 12px; }
+html[data-theme="vinyl-club"] .shelf-head h2, html[data-theme="vinyl-club"] section.shelf > h2 { font-size: var(--fs-6); letter-spacing: .14em; text-transform: uppercase; font-weight: 700; }
+html[data-theme="vinyl-club"] .hero-title, html[data-theme="vinyl-club"] .hero h1 { letter-spacing: -.035em; }
+html[data-theme="vinyl-club"] nav#nav button.on { background: none; box-shadow: inset 2px 0 0 var(--ink); border-radius: 0; }
+html[data-theme="vinyl-club"] .row { border-radius: 0; border-bottom: 1px solid var(--line); }
+html[data-theme="vinyl-club"] .pill { border-radius: 4px; }
+html[data-theme="vinyl-club"] .bar .cover-wrap::before { display: block; } /* the record peeks out from behind the sleeve */
+
+/* Midnight Ink: OLED black, hairlines everywhere, lime only where you act. */
+html[data-theme="midnight-ink"] .app { padding: 0; gap: 0; }
+html[data-theme="midnight-ink"] .side { border-right: 1px solid var(--line); }
+html[data-theme="midnight-ink"] .top { border-bottom: 1px solid var(--line); padding: 0 24px; }
+html[data-theme="midnight-ink"] .bar { border-top: 1px solid var(--line); }
+html[data-theme="midnight-ink"] .drawer { border-left: 1px solid var(--line); }
+html[data-theme="midnight-ink"] .shelf-head h2, html[data-theme="midnight-ink"] section.shelf > h2 { font-size: var(--fs-5); font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); }
+html[data-theme="midnight-ink"] nav#nav button.on { background: none; color: var(--accent); }
+html[data-theme="midnight-ink"] nav#nav button.on .nv-ico { color: var(--accent); }
+html[data-theme="midnight-ink"] .pill { border-radius: 6px; }
+html[data-theme="midnight-ink"] .pill:not(.hot) { background: none; border-color: var(--line); }
+html[data-theme="midnight-ink"] .tile-art, html[data-theme="midnight-ink"] .card .cv { box-shadow: 0 0 0 1px var(--line); }
+html[data-theme="midnight-ink"] .ico.big { background: var(--accent); color: var(--accent-ink); }
+
+/* Sunset Tape: soft dusk neutrals, round friendly shapes, a bouncy hot-pink accent. */
+html[data-theme="sunset-tape"] nav#nav button.on { background: var(--accent); color: var(--accent-ink); }
+html[data-theme="sunset-tape"] nav#nav button.on .nv-ico { color: var(--accent-ink); }
+html[data-theme="sunset-tape"] .ico.big { background: var(--accent); color: var(--accent-ink); }
+html[data-theme="sunset-tape"] .tile-play, html[data-theme="sunset-tape"] .card .go { transition-timing-function: var(--ease-spring); }
+html[data-theme="sunset-tape"] .tab.on .tab-ico { color: var(--accent); }
+@media (min-width: 1025px) {
+  html[data-theme="sunset-tape"] .bar { margin: 8px 4px 4px; border-radius: 999px; background: var(--panel); padding-left: 10px; }
+  html[data-theme="sunset-tape"] .bar .now > img, html[data-theme="sunset-tape"] .bar .cover-wrap img { border-radius: 50%; }
+}
+
+/* ---------- view transitions (A3, A12, A16, A18) and shared keyframes. Durations use the --tNNN tokens from app.css. ---------- */
+#side { view-transition-name: side; }
+#top { view-transition-name: top; }
+#bar { view-transition-name: bar; }
+#drawer { view-transition-name: drawer; }
+#main { view-transition-name: page; }
+html:not([data-np="open"]) #barCover, html[data-np="open"] #npCover { view-transition-name: cover; }
+html[data-vt="theme"] * { view-transition-name: none !important; }
+::view-transition-group(*) { animation-duration: calc(var(--d-slow) * var(--dm)); }
+::view-transition-group(side), ::view-transition-group(top), ::view-transition-group(bar), ::view-transition-group(drawer), ::view-transition-group(page) { animation: none; }
+::view-transition-old(side), ::view-transition-old(top), ::view-transition-old(bar), ::view-transition-old(drawer), ::view-transition-old(page) { display: none; }
+::view-transition-new(side), ::view-transition-new(top), ::view-transition-new(bar), ::view-transition-new(drawer), ::view-transition-new(page) { animation: none; }
+html:not([data-vt="theme"])::view-transition-old(root) { display: none; }
+html:not([data-vt="theme"])::view-transition-new(root) { animation: none; }
+html[data-vt="theme"]::view-transition-old(root), html[data-vt="theme"]::view-transition-new(root) { animation-duration: var(--t260); animation-timing-function: ease; }
+html[data-vt="page"]::view-transition-old(page) { display: block; animation: fx-vt-out var(--t140) ease-in both; }
+html[data-vt="page"]::view-transition-new(page) { animation: fx-vt-in var(--t260) var(--ease-out) var(--t40) both; }
+html[data-motion="calm"][data-vt="page"]::view-transition-old(page) { animation: fx-fade-out 120ms ease both; }
+html[data-motion="calm"][data-vt="page"]::view-transition-new(page) { animation: fx-fade 120ms ease both; }
+::view-transition-new(drawer):only-child { animation: fx-pane-in var(--t240) var(--ease-out) both; }
+::view-transition-old(drawer):only-child { display: block; animation: fx-pane-out var(--t180) ease-in both; }
+::view-transition-new(np):only-child { animation: fx-np-in var(--t360) var(--ease-out) both; }
+::view-transition-old(np):only-child { animation: fx-np-out var(--t240) ease-in both; }
+::view-transition-group(cover) { z-index: 50; animation-duration: var(--t420); animation-timing-function: var(--ease-spring); }
+::view-transition-old(cover), ::view-transition-new(cover) { animation-duration: var(--t200); }
+html[data-motion="calm"]::view-transition-group(cover) { animation: none; }
+html[data-motion="calm"]::view-transition-old(cover), html[data-motion="calm"]::view-transition-new(cover) { animation-duration: 150ms; }
+
+/* tile -> hero shared-element morph (fx.js names the two elements only for the length of one page transition) */
+::view-transition-group(hero-art) { z-index: 40; animation-duration: var(--t420); animation-timing-function: cubic-bezier(.2, .9, .25, 1); }
+::view-transition-old(hero-art), ::view-transition-new(hero-art) { height: 100%; object-fit: cover; animation-duration: var(--t280); }
+
+/* ---------- keyframes ---------- */
+@keyframes fx-ring { from { opacity: .55; transform: scale(1); } to { opacity: 0; transform: scale(1.7); } }
+@keyframes fx-item-in { from { opacity: 0; transform: translate3d(0, 10px, 0); } }
+@keyframes fx-spin { to { rotate: 360deg; } }
+@keyframes fx-eq { from { transform: scaleY(.22); } to { transform: scaleY(1); } }
+@keyframes fx-shimmer { to { transform: translateX(100%); } }
+@keyframes fx-pulse { 50% { opacity: .55; } }
+@keyframes fx-fade { from { opacity: 0; } }
+@keyframes fx-fade-out { to { opacity: 0; } }
+@keyframes fx-pop { from { opacity: 0; transform: scale(.94); } }
+@keyframes fx-pop-down { from { opacity: 0; transform: translateY(-6px) scale(.98); } }
+@keyframes fx-rise { from { opacity: 0; transform: translateY(12px); } }
+@keyframes fx-vt-out { to { opacity: 0; transform: translateY(-8px); } }
+@keyframes fx-vt-in { from { opacity: 0; transform: translateY(10px); } }
+@keyframes fx-pane-in { from { opacity: 0; transform: translateX(24px); } }
+@keyframes fx-pane-out { to { opacity: 0; transform: translateX(24px); } }
+@keyframes fx-np-in { from { opacity: 0; transform: scale(.98); } }
+@keyframes fx-np-out { to { opacity: 0; transform: scale(.98); } }
+@keyframes fx-np-drift { to { transform: scale(6.6) rotate(10deg) translate(6px, -4px); } }
+@keyframes fx-toast { from { opacity: 0; translate: 0 16px; } }
+@keyframes fx-shrink { to { transform: scaleX(0); } }
+@keyframes fx-sheet-up { from { transform: translate3d(0, 100%, 0); } }
+@keyframes fx-enter-l { from { opacity: 0; transform: translate3d(30%, 0, 0); } }
+@keyframes fx-enter-r { from { opacity: 0; transform: translate3d(-30%, 0, 0); } }
+html[data-motion="calm"] .sheet { animation: fx-fade 140ms ease-out both; }
+
+
+/* ---------- palette themes (VISUAL_V4 A). Tokens come from theme-studio.js; it sets html[data-palette] on these themes. ---------- */
+/* 4. Ramp background: a slow fade from the ramp's deep end into the page, drifting very slowly. The content sheet lets it through. */
+html[data-palette] #fxAurora { overflow: hidden; }
+html[data-palette] #fxAurora::before { content: ""; position: absolute; left: 0; right: 0; top: -12%; height: 124%;
+  background: linear-gradient(180deg, var(--ramp-top) 0%, var(--ramp-mid) 34%, var(--bg) 78%);
+  animation: ts-drift 46s ease-in-out infinite alternate; will-change: transform; }
+html[data-motion="calm"][data-palette] #fxAurora::before { animation: none; }
+@keyframes ts-drift { to { transform: translate3d(0, 9%, 0) scale(1.04); } }
+html[data-palette] main { background-color: color-mix(in srgb, var(--panel) 86%, transparent); }
+/* 5. Scroll-linked tint on Home: the sheet steps through the ramp as you scroll (scroll timeline, no timers). */
+@supports (animation-timeline: scroll()) {
+  html[data-palette][data-view="home"] main { animation: ts-tint linear both; animation-timeline: scroll(self); }
+}
+@keyframes ts-tint { 0% { background-color: var(--tint-0); } 25% { background-color: var(--tint-1); } 50% { background-color: var(--tint-2); }
+  75% { background-color: var(--tint-3); } 100% { background-color: var(--tint-4); } }
+
+/* 3. Liquid wipe: on Motion Full every theme or mode change sweeps the new look in behind an S-curve edge, on the smooth spring. */
+html[data-vt="theme"][data-motion="full"]::view-transition-old(root) { animation: none; }
+html[data-vt="theme"][data-motion="full"]::view-transition-new(root) { mix-blend-mode: normal;
+  animation: ts-wipe 860ms var(--spring-smooth, var(--ease-inout)) both; }
+@keyframes ts-wipe {
+  0% { clip-path: polygon(-60% -2%, -30.0% -2%, -30.0% 6%, -30.0% 14%, -30.0% 22%, -30.0% 30%, -30.0% 38%, -30.0% 46%, -30.0% 54%, -30.0% 62%, -30.0% 70%, -30.0% 78%, -30.0% 86%, -30.0% 94%, -30.0% 102%, -60% 102%); }
+  30% { clip-path: polygon(-60% -2%, 20.0% -2%, 27.9% 6%, 34.3% 14%, 37.7% 22%, 37.2% 30%, 33.0% 38%, 26.0% 46%, 18.0% 54%, 11.0% 62%, 6.8% 70%, 6.3% 78%, 9.7% 86%, 16.1% 94%, 24.0% 102%, -60% 102%); }
+  60% { clip-path: polygon(-60% -2%, 73.1% -2%, 76.4% 6%, 76.7% 14%, 73.8% 22%, 68.5% 30%, 62.1% 38%, 56.1% 46%, 52.1% 54%, 51.0% 62%, 53.2% 70%, 58.0% 78%, 64.3% 86%, 70.5% 94%, 75.1% 102%, -60% 102%); }
+  100% { clip-path: polygon(-60% -2%, 135.0% -2%, 135.0% 6%, 135.0% 14%, 135.0% 22%, 135.0% 30%, 135.0% 38%, 135.0% 46%, 135.0% 54%, 135.0% 62%, 135.0% 70%, 135.0% 78%, 135.0% 86%, 135.0% 94%, 135.0% 102%, -60% 102%); }
+}

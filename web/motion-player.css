@@ -1,0 +1,104 @@
+/* motion-player: the player half of MOTION_SPEC.md. Loaded after app.css; overrides its old bezier motion for the
+   mini player, full player, sheets, lyrics and scrubber. motion-player.js writes the transforms; tokens come from spring.js. */
+
+/* ---------- full player + card stack ---------- */
+#np { animation: none !important; transition: none !important; }
+#np { will-change: transform; } /* always its own layer: dropping it on settle re-rastered the player, blank for 2 frames */
+html.mp-moving #np { border-radius: 14px 14px 0 0; }
+html[data-np="open"] .np-meta > *, html[data-np="open"] .np-left > .seek, html[data-np="open"] .np-left > .btns { animation: none; }
+.mp-dim { position: fixed; inset: 0; z-index: 19; background: #000; opacity: 0; pointer-events: none; }
+html.mp-stack, html.mp-stack body { background: #000; }
+/* A settled player covers the screen: hide the page behind so its layers leave GPU memory. With them all kept, phones
+   ran out of tile memory and blanked random layers (the cover, sheet tiles) for a frame. They come back as a drag starts. */
+html[data-np="open"]:not(.mp-moving, .mp-wake) :is(#app, .scn-bg, #fxAurora, .mp-dim) { visibility: hidden; }
+html.mp-stack #app { transform-origin: 50% 50%; border-radius: 12px; overflow: clip; will-change: transform; }
+.mp-fly { position: fixed; z-index: 21; object-fit: cover; transform-origin: 0 0; pointer-events: none; will-change: transform; box-shadow: var(--shadow-2); }
+@media (hover: none), (pointer: coarse) {
+  #np { touch-action: none; }
+  #np .np-pane { touch-action: pan-y; }
+  .bar { touch-action: none; }
+}
+
+/* ---------- artwork breathes with play / pause (box-shadow scales with it, so it tightens too) ---------- */
+.cover-wrap.big img { transition: transform var(--spring-bouncy-ms) var(--spring-bouncy); will-change: transform; } /* own layer: no re-raster as it breathes */
+body:not(.playing) .cover-wrap.big img { transform: scale(.82); }
+.cover-wrap.big::before { transition: scale var(--spring-bouncy-ms) var(--spring-bouncy); }
+body:not(.playing) .cover-wrap.big::before { scale: .82; }
+@media (hover: none), (pointer: coarse) {
+  #np[data-ptab]:not([data-ptab=now]) .cover-wrap.big img { transform: none; } /* the small header cover stays still */
+}
+
+/* ---------- mini player swipe ---------- */
+.bar .now .cover-wrap, .bar .now .meta { transition: none; }
+.bar .now { position: relative; overflow: clip; }
+.mp-peek { position: absolute; top: 0; bottom: 0; right: 56px; display: flex; align-items: center; gap: 10px; min-width: 0; pointer-events: none; }
+.mp-peek .meta { min-width: 0; }
+
+/* ---------- play / pause press + icon morph ---------- */
+#play, [data-act="play"], #next, #prev, [data-act="next"], [data-act="prev"] { transition: transform var(--spring-press-ms) var(--spring-press); }
+.ico.mp-press { transform: scale(.9); }
+.pp { transition: d var(--spring-snappy-ms) var(--spring-snappy); }
+[data-state] > svg { transition: transform var(--spring-press-ms) var(--spring-press); }
+[data-state="playing"] > svg { animation: fx-pop var(--spring-bouncy-ms) var(--spring-bouncy); }
+
+/* ---------- scrubber + volume: a 10 px track drawn at 40% height, grows to full while held. The input is 2.5x tall
+   with negative margins so the scaled hit area stays the original size. ---------- */
+.mp-range { --hit: 16px; --th: 10px !important; height: calc(var(--hit) * 2.5) !important; margin-block: calc(var(--hit) * -.75);
+  transform: scaleY(.4); transition: transform var(--spring-snappy-ms) var(--spring-snappy); }
+.mp-range:hover { transform: scaleY(.55); }
+.mp-range.mp-on { transform: none; }
+.mp-range::-webkit-slider-thumb { width: 14px; height: 14px; margin-top: -2px; transform: scale(0) !important; transition: transform var(--spring-snappy-ms) var(--spring-snappy); }
+.mp-range.mp-on::-webkit-slider-thumb { transform: scale(1) !important; }
+.mp-range::-moz-range-thumb { transform: scale(0); }
+.mp-range.mp-on::-moz-range-thumb { transform: scale(1); }
+.seek > span { transition: transform var(--spring-snappy-ms) var(--spring-snappy), opacity var(--spring-snappy-ms) var(--spring-snappy); }
+.seek.mp-on > span:first-child { transform: translate3d(-6px, 0, 0); }
+.seek.mp-on > span:last-child { transform: translate3d(6px, 0, 0); }
+@media (hover: none), (pointer: coarse) { .mp-range { --hit: 44px; } }
+
+/* ---------- lyrics: depth by distance from the sung line (--d is set per line by motion-player.js) ---------- */
+.lyr p { transform: none; transform-origin: 0 50%; scale: .92; filter: blur(calc(max(0, var(--d, 0) - 1) * .7px));
+  transition: scale var(--spring-smooth-ms) var(--spring-smooth), opacity var(--spring-smooth-ms) var(--spring-smooth), filter var(--spring-smooth-ms) var(--spring-smooth); }
+.lyr p.on { transform: none; scale: 1; }
+.lyr .plain, .lyr p.plain, .mp-free .lyr p, html[data-motion="off"] .lyr p { filter: none; }
+.lyr .plain, .lyr p.plain { scale: none; }
+.mp-free .lyr p { opacity: .8; }
+
+/* ---------- bottom sheet: motion-player.js drives the transform and scrim; detents + rubber-band ---------- */
+.sheet { animation: none !important; transition: none !important; will-change: transform; }
+.sheet-scrim { animation: none; opacity: 0; }
+.sheet-body > * { animation-duration: var(--spring-smooth-ms); animation-timing-function: var(--spring-smooth); }
+.mp-lift { position: relative; z-index: 2; transform: scale(1.03) !important; box-shadow: var(--shadow-2);
+  transition: transform var(--spring-press-ms) var(--spring-press) !important; }
+
+/* ---------- reorder: the other rows make room ---------- */
+.mp-room > .qrow:not(.is-dragging), .mp-room > .row:not(.is-dragging) { transition: transform var(--spring-snappy-ms) var(--spring-snappy); }
+.row.is-dragging, .qrow.is-dragging { transform: translate3d(0, var(--dy, 0px), 0) scale(1.03); }
+/* the record behind the big cover waits while the artwork flies, then fades in */
+#np .cover-wrap.big::before { transition: scale var(--spring-bouncy-ms) var(--spring-bouncy), opacity var(--spring-smooth-ms) var(--spring-smooth); }
+html.mp-moving #np .cover-wrap.big::before { opacity: 0; transition: none; }
+
+/* ---------- mini player = a floating pill: round art inside a progress ring (--p comes from app.js on #bar), album tint ---------- */
+@media (max-width: 1024px) {
+  .bar { border-radius: 999px !important; padding-left: 9px; background: color-mix(in srgb, var(--vz-r3, var(--accent)) 20%, var(--raise)); }
+  .bar::before { display: none; }
+  .bar .now .cover-wrap img, .mp-peek .cover-wrap img { border-radius: 50%; }
+  .bar .now > .cover-wrap::after { content: ""; position: absolute; inset: -4px; z-index: 2; border-radius: 50%; pointer-events: none;
+    background: conic-gradient(var(--accent) var(--p, 0%), color-mix(in srgb, var(--ink) 16%, transparent) 0);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); }
+}
+
+/* ---------- Up next card stack: --fan 0 = stacked, 1 = the plain list; --cy / --cs per card from motion-player.js ---------- */
+#npQueue { position: relative; }
+#npQueue.mp-deck:not(.mp-fanned) { overflow: hidden; touch-action: none; }
+#npQueue.mp-deck .qrow.mp-card { position: relative; margin-bottom: 8px; border-radius: 18px;
+  background: color-mix(in srgb, var(--tint) 26%, var(--raise)); box-shadow: 0 10px 18px -8px rgb(0 0 0 / .5); }
+#npQueue.mp-deck .qrow.mp-card:not(.is-dragging) { transform-origin: 50% 0;
+  transform: translate3d(0, calc(var(--cy) * (1 - var(--fan, 0))), 0) scale(calc(1 - var(--cs) * (1 - var(--fan, 0)))); }
+#npQueue.mp-deck > :not(.mp-card):not(.mp-deck-bar), #npQueue.mp-deck > .mp-deep { opacity: var(--fan, 0); }
+#npQueue.mp-deck > .mp-card:not(.cur) > * { opacity: var(--fan, 0); } /* stacked, only the edges of the cards behind show */
+.mp-deck-bar { position: absolute; z-index: 70; top: 0; right: 8px; display: flex; gap: 6px;
+  transform: translate3d(0, calc(var(--below, 0px) * (1 - var(--fan, 0))), 0); }
+.mp-deck-bar button { height: 28px; padding: 0 13px; border-radius: 999px; background: var(--fill-2); color: var(--ink); font-size: var(--fs-6); font-weight: 600; }
+.mp-deck-bar .mp-deck-shuf[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink, #000); }

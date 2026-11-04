@@ -1,0 +1,270 @@
+{
+ "search_top_song": {
+  "category": "Top result",
+  "resultType": "song",
+  "videoId": "L0HjzbAagzM",
+  "videoType": "MUSIC_VIDEO_TYPE_ATV",
+  "title": "No Snitching (feat. Harshit Rao)",
+  "artists": [
+   {
+    "name": "Vin WRLD",
+    "id": "UCyVztOf2vz4RQuN4ixpl1pw"
+   }
+  ],
+  "duration": "2:41",
+  "duration_seconds": 161,
+  "thumbnails": [
+   {
+    "url": "https://yt3.googleusercontent.com/xvZmFbFxEYsP8AftsJMnoCjIoDYqypB6w4LjNqVbMp6VvFI8ESzXP2QD9ss65s4dlXkVUGsriV-NZGrV=w60-h60-l90-rj",
+    "width": 60,
+    "height": 60
+   },
+   {
+    "url": "https://yt3.googleusercontent.com/xvZmFbFxEYsP8AftsJMnoCjIoDYqypB6w4LjNqVbMp6VvFI8ESzXP2QD9ss65s4dlXkVUGsriV-NZGrV=w120-h120-l90-rj",
+    "width": 120,
+    "height": 120
+   }
+  ]
+ },
+ "search_song": {
+  "category": "Songs",
+  "resultType": "song",
+  "title": "Harder, Better, Faster, Stronger",
+  "album": {
+   "name": "Discovery",
+   "id": "MPREb_7ltM34kr0mH"
+  },
+  "videoId": "JhulBGMA7G4",
+  "videoType": "MUSIC_VIDEO_TYPE_ATV",
+  "isAvailable": true,
+  "duration": "3:47",
+  "year": null,
+  "artists": [
+   {
+    "name": "Daft Punk",
+    "id": "UCRr1xG_2WIDs18a6cIiCxeA"
+   }
+  ],
+  "duration_seconds": 227,
+  "views": "400M",
+  "isExplicit": false,
+  "thumbnails": [
+   {
+    "url": "https://yt3.googleusercontent.com/qrY7xjdjqL0FEneZKHk845JeeFjdWOgexUa_BhsUxskJ2iflhzpbofqGJZBcPHDGU9JjoZflE4yn3P74=w60-h60-l90-rj",
+    "width": 60,
+    "height": 60
+   },
+   {
+    "url": "https://yt3.googleusercontent.com/qrY7xjdjqL0FEneZKHk845JeeFjdWOgexUa_BhsUxskJ2iflhzpbofqGJZBcPHDGU9JjoZflE4yn3P74=w120-h120-l90-rj",
+    "width": 120,
+    "height": 120
+   }
+  ]
+ },
+ "search_video": {
+  "category": "More from YouTube",
+  "resultType": "video",
+  "title": "Lil Mabu & DUSTY LOCANE - NO SNITCHING (Slowed + Reverb)",
+  "videoId": "nl-5tRDIQIc",
+  "videoType": "MUSIC_VIDEO_TYPE_UGC",
+  "isAvailable": true,
+  "duration": "2:57",
+  "year": null,
+  "artists": [
+   {
+    "name": "Sinner",
+    "id": "UCLKFVBCMTJ2vCv_brem3kNw"
+   }
+  ],
+  "views": "188K",
+  "duration_seconds": 177,
+  "thumbnails": [
+   {
+    "url": "https://i.ytimg.com/vi/nl-5tRDIQIc/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3m6bt-J1Bq3Inq5OXw5j_lPBVPXVA",
+    "width": 400,
+    "height": 225
+   }
+  ]
+ },
+ "search_album": {
+  "category": "Albums",
+  "resultType": "album",
+  "title": "Random Access Memories",
+  "type": "Album",
+  "playlistId": "OLAK5uy_kNhM2yaBTOVwrcZJepB1C9P3-n5_Sfy5c",
+  "duration": null,
+  "year": "2013",
+  "artists": [
+   {
+    "name": "Daft Punk",
+    "id": "UCRr1xG_2WIDs18a6cIiCxeA"
+   }
+  ],
+  "browseId": "MPREb_K8qWMWVqXGi",
+  "isExplicit": false,
+  "thumbnails": [
+   {
+    "url": "https://yt3.googleusercontent.com/N55arCGj69gtw6thXK8JUPisxoVYiwuIEQ7I6SGlkEyNcSJ7xIWPe76Vuu1SiUqRyx5w9qvR_zV8fV3CWQ=w60-h60-l90-rj",
+    "width": 60,
+    "height": 60
+   },
+   {
+    "url": "https://yt3.googleusercontent.com/N55arCGj69gtw6thXK8JUPisxoVYiwuIEQ7I6SGlkEyNcSJ7xIWPe76Vuu1SiUqRyx5w9qvR_zV8fV3CWQ=w544-h544-l90-rj",
+    "width": 544,
+    "height": 544
+   }
+  ]
+ },
+ "search_top_artist": {
+  "category": "Top result",
+  "resultType": "artist",
+  "subscribers": "68.1M",
+  "artists": [
+   {
+    "name": "Daft Punk",
+    "id": "UCRr1xG_2WIDs18a6cIiCxeA"
+   }
+  ],
+  "thumbnails": [
+   {
+    "url": "https://lh3.googleusercontent.com/qLhu6Py_4_xoBsoubKQsXlhOQGqU9YU1ZRAbFusF0LlrPkXbbpu7bEh-k_ZtE4JwLgubvucAQqcK1hRk=w60-h60-p-l90-rj",
+    "width": 60,
+    "height": 60
+   },
+   {
+    "url": "https://lh3.googleusercontent.com/qLhu6Py_4_xoBsoubKQsXlhOQGqU9YU1ZRAbFusF0LlrPkXbbpu7bEh-k_ZtE4JwLgubvucAQqcK1hRk=w120-h120-p-l90-rj",
+    "width": 120,
+    "height": 120
+   }
+  ]
+ },
+ "chart_artist": {
+  "title": "Michael Jackson",
+  "browseId": "UCoIOOL7QKuBhQHVKL8y7BEQ",
+  "subscribers": "41.8M",
+  "thumbnails": [
+   {
+    "url": "https://lh3.googleusercontent.com/x-Z35q6HsBB98J85-4oNqPnOen4pZBaNCpHawzf_ejs-pkgh6Eh3D2Fu7S1T4gEj0yWZ0c6DOAHCpA=w60-h60-p-l90-rj",
+    "width": 60,
+    "height": 60
+   },
+   {
+    "url": "https://lh3.googleusercontent.com/x-Z35q6HsBB98J85-4oNqPnOen4pZBaNCpHawzf_ejs-pkgh6Eh3D2Fu7S1T4gEj0yWZ0c6DOAHCpA=w120-h120-p-l90-rj",
+    "width": 120,
+    "height": 120
+   }
+  ],
+  "rank": "1",
+  "trend": "up"
+ },
+ "album": {
+  "title": "Random Access Memories",
+  "type": "Album",
+  "thumbnails": [
+   {
+    "url": "https://yt3.googleusercontent.com/N55arCGj69gtw6thXK8JUPisxoVYiwuIEQ7I6SGlkEyNcSJ7xIWPe76Vuu1SiUqRyx5w9qvR_zV8fV3CWQ=w60-h60-l90-rj",
+    "width": 60,
+    "height": 60
+   },
+   {
+    "url": "https://yt3.googleusercontent.com/N55arCGj69gtw6thXK8JUPisxoVYiwuIEQ7I6SGlkEyNcSJ7xIWPe76Vuu1SiUqRyx5w9qvR_zV8fV3CWQ=w544-h544-l90-rj",
+    "width": 544,
+    "height": 544
+   }
+  ],
+  "isExplicit": false,
+  "year": "2013",
+  "artists": [
+   {
+    "name": "Daft Punk",
+    "id": "UCRr1xG_2WIDs18a6cIiCxeA"
+   }
+  ],
+  "trackCount": 13,
+  "duration": "1 hour, 14 minutes",
+  "audioPlaylistId": "OLAK5uy_kNhM2yaBTOVwrcZJepB1C9P3-n5_Sfy5c",
+  "duration_seconds": 4483,
+  "tracks": [
+   {
+    "videoId": "IluRBvnYMoY",
+    "title": "Give Life Back to Music",
+    "artists": [
+     {
+      "name": "Daft Punk",
+      "id": "UCRr1xG_2WIDs18a6cIiCxeA"
+     }
+    ],
+    "album": "Random Access Memories",
+    "thumbnails": null,
+    "isAvailable": true,
+    "isExplicit": false,
+    "videoType": "MUSIC_VIDEO_TYPE_OMV",
+    "views": "55M plays",
+    "communityVoteStatus": null,
+    "trackNumber": 1,
+    "duration": "4:36",
+    "duration_seconds": 276,
+    "creditsBrowseId": "MPTCzKSsP2084nU"
+   },
+   {
+    "videoId": "ajGKWk0auOc",
+    "title": "The Game of Love",
+    "artists": [
+     {
+      "name": "Daft Punk",
+      "id": "UCRr1xG_2WIDs18a6cIiCxeA"
+     }
+    ],
+    "album": "Random Access Memories",
+    "thumbnails": null,
+    "isAvailable": true,
+    "isExplicit": false,
+    "videoType": "MUSIC_VIDEO_TYPE_OMV",
+    "views": "28M plays",
+    "communityVoteStatus": null,
+    "trackNumber": 2,
+    "duration": "5:23",
+    "duration_seconds": 323,
+    "creditsBrowseId": "MPTC_vOcbrUsmjM"
+   }
+  ]
+ },
+ "artist_album": {
+  "title": "Random Access Memories (Drumless Edition)",
+  "artists": [],
+  "browseId": "MPREb_OgeEnoHTsCm",
+  "audioPlaylistId": "OLAK5uy_k47QV7r7DblltHRB-1yRp-ZyrKYN4gkt0",
+  "thumbnails": [
+   {
+    "url": "https://yt3.googleusercontent.com/wm1nkwlINP48XhoI_M_m5Z7IWIw742yukaiKKxqQGcskmB6TdcKZqTsBNChGW_I1BphPt7OkBwu9kRE=w226-h226-l90-rj",
+    "width": 226,
+    "height": 226
+   },
+   {
+    "url": "https://yt3.googleusercontent.com/wm1nkwlINP48XhoI_M_m5Z7IWIw742yukaiKKxqQGcskmB6TdcKZqTsBNChGW_I1BphPt7OkBwu9kRE=w544-h544-l90-rj",
+    "width": 544,
+    "height": 544
+   }
+  ],
+  "isExplicit": false,
+  "year": "2023"
+ },
+ "artist_single": {
+  "title": "GLBTM (Studio Outtakes)",
+  "browseId": "MPREb_X1DQ1j0PPrX",
+  "thumbnails": [
+   {
+    "url": "https://yt3.googleusercontent.com/fgqj_3-DKrpBQNAoK9RmUAbW6-JaDbcPRF4ZsWjsLa1U-3m6X7pvg2QF5QrZLvs6HfTFS-d8DlKzYANK=w226-h226-l90-rj",
+    "width": 226,
+    "height": 226
+   },
+   {
+    "url": "https://yt3.googleusercontent.com/fgqj_3-DKrpBQNAoK9RmUAbW6-JaDbcPRF4ZsWjsLa1U-3m6X7pvg2QF5QrZLvs6HfTFS-d8DlKzYANK=w544-h544-l90-rj",
+    "width": 544,
+    "height": 544
+   }
+  ],
+  "type": "Single",
+  "year": "2023"
+ }
+}

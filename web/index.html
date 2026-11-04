@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en" data-theme="night-market" data-mode="dark" data-motion="full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#170f20">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="themes.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="motion-nav.css">
+<link rel="stylesheet" href="motion-player.css">
+<link rel="stylesheet" href="visualizer.css">
+<link rel="stylesheet" href="scenes.css">
+<link rel="stylesheet" href="effects.css">
+<link rel="stylesheet" href="theme-studio.css">
+<script>/* ES5 on purpose: the app's scripts need Chrome 80+ (?. and ??). A phone whose Android System WebView was never
+   updated can't parse them and would show a blank page, so say what to do instead. */
+try { new Function('a', 'return a?.b ?? 0'); } catch (e) {
+  document.addEventListener('DOMContentLoaded', function () {
+    document.body.innerHTML = '<div style="position:fixed;top:0;right:0;bottom:0;left:0;z-index:99;padding:48px 24px;background:#170f20;color:#f4eefa;font:16px/1.5 sans-serif">' +
+      '<h1 style="font-size:22px;margin:0 0 12px">Spin needs a newer Android System WebView</h1>' +
+      '<p>This phone\'s WebView is too old to run Spin. Update <b>Android System WebView</b> (or Chrome) in Google Play, then open Spin again.</p>' +
+      '<p><a style="color:#ff9bd2" href="https://play.google.com/store/apps/details?id=com.google.android.webview">Open it in Google Play</a></p></div>';
+  });
+}</script>
+<script src="spring.js"></script>
+<script>/* First start of v0.4: switch on the new look once (Raindrop + a live aurora). Appearance changes it back any time. */
+try { if (!localStorage.getItem('ocm.v4look')) { const a = JSON.parse(localStorage.getItem('ocm.appearance') || '{}');
+  localStorage.setItem('ocm.appearance', JSON.stringify({ ...a, v: 1, theme: 'raindrop', mode: 'dark' }));
+  if (!localStorage.getItem('ocm.scene')) localStorage.setItem('ocm.scene', 'aurora');
+  localStorage.setItem('ocm.v4look', '1'); } } catch { /* private window: keep the saved look */ }</script>
+<script src="theme-studio.js"></script>
+<script src="fx.js"></script>
+<title>OddlyClever Spin</title>
+<link rel="icon" href="favicon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+</head>
+<body>
+<div class="launch" id="launch" aria-hidden="true">
+  <div class="ln-pills"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>
+  <svg viewBox="0 0 40 40" class="ln-disc"><circle cx="20" cy="20" r="19" fill="#120b1a"/><circle cx="20" cy="20" r="14" fill="none" stroke="#3a2650" stroke-width="1"/><circle cx="20" cy="20" r="10" fill="none" stroke="#3a2650" stroke-width="1"/><circle cx="20" cy="20" r="7" fill="var(--accent, var(--hot))"/><circle cx="17.5" cy="19" r="1.2" fill="#120b1a"/><circle cx="22.5" cy="19" r="1.2" fill="#120b1a"/><path d="M17 22.2q3 2 6 0" stroke="#120b1a" stroke-width="1.1" fill="none" stroke-linecap="round"/></svg>
+</div>
+<div class="app" id="app" data-side="full">
+  <aside class="side" id="side" aria-label="Sidebar">
+    <div class="brand">
+      <svg viewBox="0 0 100 100" class="disc" aria-hidden="true"><rect x="21" y="17" width="16" height="66" rx="8" fill="#000" opacity="0.3" transform="rotate(4 29 75)"/><rect x="21" y="17" width="16" height="66" rx="8" fill="#4CC9F0" transform="rotate(0 29 75)"/><rect x="21" y="17" width="16" height="66" rx="8" fill="#000" opacity="0.3" transform="rotate(24 29 75)"/><rect x="21" y="17" width="16" height="66" rx="8" fill="#4895EF" transform="rotate(20 29 75)"/><rect x="21" y="17" width="16" height="66" rx="8" fill="#000" opacity="0.3" transform="rotate(44 29 75)"/><rect x="21" y="17" width="16" height="66" rx="8" fill="#4361EE" transform="rotate(40 29 75)"/><rect x="21" y="17" width="16" height="66" rx="8" fill="#000" opacity="0.3" transform="rotate(64 29 75)"/><rect x="21" y="17" width="16" height="66" rx="8" fill="#7209B7" transform="rotate(60 29 75)"/><rect x="21" y="17" width="16" height="66" rx="8" fill="#000" opacity="0.3" transform="rotate(84 29 75)"/><rect x="21" y="17" width="16" height="66" rx="8" fill="#F72585" transform="rotate(80 29 75)"/><circle cx="29" cy="75" r="5.5" fill="#FFD166"/></svg>
+      <div><b>OddlyClever</b><span>Spin</span></div>
+    </div>
+    <nav id="nav" aria-label="Library">
+      <button data-view="home" class="on" aria-current="page"><span class="nv-ico"></span><span class="nv-txt">Listen now</span></button>
+      <button data-view="get"><span class="nv-ico"></span><span class="nv-txt">Add music</span></button>
+      <button id="getAppNav"><span class="nv-ico"></span><span class="nv-txt">Get the app</span></button>
+      <h6>Library</h6>
+      <button data-view="songs"><span class="nv-ico"></span><span class="nv-txt">Songs</span></button>
+      <button data-view="albums"><span class="nv-ico"></span><span class="nv-txt">Albums</span></button>
+      <button data-view="artists"><span class="nv-ico"></span><span class="nv-txt">Artists</span></button>
+      <button data-view="liked"><span class="nv-ico"></span><span class="nv-txt">Liked</span></button>
+      <h6>Playlists <span class="add" id="newPl" role="button" tabindex="0" aria-label="New playlist">+</span></h6>
+      <div id="plNav"></div>
+    </nav>
+    <div class="side-foot">
+      <button class="dl-pill" id="dlPill" hidden>Downloading <b id="dlCount">0</b></button>
+      <button class="ico" id="settingsBtn" aria-label="Appearance and settings" aria-haspopup="dialog"></button>
+      <button class="ico" id="sideToggle" aria-label="Collapse sidebar" aria-pressed="false"></button>
+    </div>
+  </aside>
+
+  <header class="top" id="top">
+    <div class="top-nav">
+      <button class="ico" id="navBack" aria-label="Back" disabled></button>
+      <button class="ico" id="navFwd" aria-label="Forward" disabled></button>
+    </div>
+    <div class="gsearch" id="gsearch" data-open="false" data-mode="search">
+      <label class="gs-field" for="gsInput">
+        <span class="gs-ico" aria-hidden="true"></span>
+        <input id="gsInput" type="text" role="combobox" aria-expanded="false" aria-controls="gsPanel"
+               aria-autocomplete="list" aria-activedescendant="" autocomplete="off" spellcheck="false"
+               placeholder="Search your music or the web">
+        <button class="ico gs-clear" id="gsClear" type="button" aria-label="Clear search" hidden></button>
+        <button class="gs-cancel" id="gsCancel" type="button">Cancel</button>
+        <kbd class="gs-key" aria-hidden="true">/</kbd>
+      </label>
+      <div class="gs-panel" id="gsPanel" role="listbox" aria-label="Search results" hidden></div>
+    </div>
+    <div class="top-right">
+      <button class="pill sm" id="topGet" type="button">Add music</button>
+      <button class="ico" id="topSettings" aria-label="Appearance and settings" aria-haspopup="dialog"></button>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1" aria-live="off"></main>
+  <div class="ptr" id="ptr" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
+  <aside class="drawer" id="drawer" data-swipe="sheet-down" hidden>
+    <div class="drawer-tabs" role="tablist" aria-label="Side panel">
+      <button role="tab" id="tab-queue" data-tab="queue" aria-selected="true" aria-controls="drawerBody" class="on">Up next</button>
+      <button role="tab" id="tab-lyrics" data-tab="lyrics" aria-selected="false" aria-controls="drawerBody">Lyrics</button>
+      <button role="tab" id="tab-downloads" data-tab="downloads" aria-selected="false" aria-controls="drawerBody">Downloads</button>
+      <button class="x ico" id="drawerClose" aria-label="Close"></button>
+    </div>
+    <div id="drawerBody" role="tabpanel" aria-labelledby="tab-queue"></div>
+  </aside>
+
+  <footer class="bar" id="bar" data-swipe="mini">
+    <div class="now" id="nowMini" role="button" tabindex="0" aria-label="Open Now Playing">
+      <div class="cover-wrap"><img id="barCover" alt="" draggable="false"></div>
+      <div class="meta"><b id="barTitle">Nothing playing</b><span id="barArtist">Pick a song to start</span><span class="badge-stream" id="barStream" hidden>Streaming</span></div>
+      <button class="ico like" id="barLike" aria-label="Like" aria-pressed="false"></button>
+      <button class="pill sm get" id="barGet" type="button" hidden>Get</button>
+    </div>
+    <div class="ctl">
+      <div class="btns">
+        <button class="ico" id="shuffle" aria-label="Shuffle" aria-pressed="false"></button>
+        <button class="ico" id="prev" aria-label="Previous"></button>
+        <button class="ico big" id="play" aria-label="Play" data-state="paused"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="pp" d="M8 5v14l11-7z"/></svg></button>
+        <button class="ico" id="next" aria-label="Next"></button>
+        <button class="ico" id="repeat" aria-label="Repeat" aria-pressed="false"></button>
+      </div>
+      <div class="seek"><span id="tCur">0:00</span><input type="range" id="seek" min="0" max="1000" value="0" aria-label="Seek"><span id="tDur">0:00</span></div>
+    </div>
+    <div class="right">
+      <button class="ico" id="sleepBtn" aria-label="Sleep timer" aria-haspopup="menu"><span class="badge" id="sleepBadge" hidden>15</span></button>
+      <button class="ico" id="lyricsBtn" aria-label="Lyrics"></button>
+      <button class="ico" id="queueBtn" aria-label="Up next"></button>
+      <button class="ico" id="miniBtn" aria-label="Mini player" hidden></button>
+      <button class="ico" id="fullBtn" aria-label="Full screen"></button>
+      <button class="ico" id="muteBtn" aria-label="Mute"></button>
+      <input type="range" id="vol" min="0" max="100" value="80" aria-label="Volume">
+    </div>
+  </footer>
+
+  <nav class="tabbar" id="tabbar" aria-label="Main">
+    <button class="tab on" data-view="home" aria-current="page"><span class="tab-ico"></span><span class="tab-txt">Home</span></button>
+    <button class="tab" data-view="search"><span class="tab-ico"></span><span class="tab-txt">Search</span></button>
+    <button class="tab" data-view="library"><span class="tab-ico"></span><span class="tab-txt">Library</span></button>
+    <button class="tab" data-view="downloads"><span class="tab-ico"><span class="badge" id="tabDlBadge" hidden>0</span></span><span class="tab-txt">Downloads</span></button>
+  </nav>
+</div>
+
+<section class="np" id="np" role="dialog" aria-modal="true" aria-label="Now playing" data-swipe="sheet-down" hidden>
+  <div class="np-grab" id="npGrab" aria-hidden="true"></div>
+  <div class="np-bg" id="npBg" aria-hidden="true"></div>
+  <button class="ico np-close" id="npClose" aria-label="Close"></button>
+  <div class="np-left">
+    <div class="cover-wrap big"><img id="npCover" alt="" draggable="false"></div>
+    <div class="np-meta"><h2 id="npTitle"></h2><p id="npArtist"></p><span class="badge-stream" id="npStream" hidden>Streaming</span><button class="pill sm get" id="npGet" type="button" hidden>Get</button></div>
+    <div class="seek"><span id="npCur">0:00</span><input type="range" id="npSeek" min="0" max="1000" value="0" aria-label="Seek"><span id="npDur">0:00</span></div>
+    <div class="btns">
+      <button class="ico" data-act="shuffle" aria-label="Shuffle" aria-pressed="false"></button>
+      <button class="ico" data-act="prev" aria-label="Previous"></button>
+      <button class="ico big" data-act="play" aria-label="Play" data-state="paused"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="pp" d="M8 5v14l11-7z"/></svg></button>
+      <button class="ico" data-act="next" aria-label="Next"></button>
+      <button class="ico" data-act="repeat" aria-label="Repeat" aria-pressed="false"></button>
+    </div>
+    <div class="np-extra">
+      <button class="ico like" data-act="like" aria-label="Like" aria-pressed="false"></button>
+      <button class="ico" data-act="sleep" aria-label="Sleep timer" aria-haspopup="menu"></button>
+    </div>
+  </div>
+  <div class="np-right">
+    <div class="np-tabs" role="tablist" aria-label="Now playing panels">
+      <button role="tab" class="np-tab-now" data-nptab="now" aria-selected="false">Player</button>
+      <button role="tab" class="on" data-nptab="lyrics" aria-selected="true" aria-controls="npLyrics">Lyrics</button>
+      <button role="tab" data-nptab="queue" aria-selected="false" aria-controls="npQueue">Up next</button>
+      <button role="tab" data-nptab="info" aria-selected="false" aria-controls="npInfo">Info</button>
+    </div>
+    <div class="np-pane on" id="npLyrics" role="tabpanel" aria-label="Lyrics"></div>
+    <div class="np-pane" id="npQueue" role="tabpanel" aria-label="Up next" hidden></div>
+    <div class="np-pane" id="npInfo" role="tabpanel" aria-label="Info" hidden></div>
+  </div>
+</section>
+
+<div class="dlg set-dlg" id="settings" hidden>
+  <div class="dlg-card set-card" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <header class="dlg-head set-head">
+      <div class="set-grab" aria-hidden="true"></div>
+      <div class="set-bar"><h2 id="settingsTitle">Settings</h2><button class="ico dlg-x" aria-label="Close settings"></button></div>
+      <nav class="set-nav" aria-label="Settings sections">
+        <a href="#setLook" aria-current="true">Look</a><a href="#setBg">Background</a><a href="#setMotion">Motion</a><a href="#setDiscover">More</a>
+      </nav>
+    </header>
+
+    <section class="set-group" id="setLook" aria-labelledby="setLookTitle">
+      <h3 class="set-title" id="setLookTitle">Look</h3>
+      <div class="set-block set-bare">
+        <span class="set-lbl" id="tsLabel">Theme</span>
+        <p class="ts-now" id="tsNow"></p>
+        <div class="ts-picker" id="tsPicker" role="radiogroup" aria-labelledby="tsLabel"></div>
+        <div class="theme-grid" id="themeGrid" hidden></div><!-- app.js still paints this; the picker above replaces it -->
+        <div class="ts-studio" id="tsStudio" hidden>
+          <b>Make your own</b>
+          <p class="hint">Pull colours from a photo or the cover that’s playing, or shuffle until one feels right.</p>
+          <div class="ts-actions">
+            <button class="pill" type="button" id="tsPhoto">From a photo</button><input type="file" accept="image/*" id="tsFile" hidden>
+            <button class="pill" type="button" id="tsCover">From this cover</button>
+            <button class="pill" type="button" id="tsShuffle">Shuffle</button>
+          </div>
+          <div class="ts-preview" id="tsPreview" hidden>
+            <div class="ts-chips" id="tsChips" aria-label="Your palette"></div>
+            <button class="pill hot" type="button" id="tsSave">Use as My theme</button>
+          </div>
+          <p class="hint" id="tsMsg" role="status"></p>
+        </div>
+      </div>
+      <div class="set-block set-pref">
+        <div class="set-pref-text"><span class="set-lbl" id="modeLabel">Light or dark</span><p class="hint" id="modeHint">Auto follows your device.</p></div>
+        <div class="seg" role="radiogroup" aria-labelledby="modeLabel">
+          <button type="button" role="radio" aria-checked="false" data-mode-pick="light">Light</button>
+          <button type="button" role="radio" aria-checked="false" data-mode-pick="dark">Dark</button>
+          <button type="button" role="radio" aria-checked="true" data-mode-pick="auto">Auto</button>
+        </div>
+      </div>
+      <div class="set-block set-list">
+        <label class="switch"><input type="checkbox" role="switch" id="setAlbum"><span class="track" aria-hidden="true"><i></i></span><span class="lbl">Album colours</span><span class="hint">The player takes its colours from the cover.</span></label>
+        <label class="switch"><input type="checkbox" role="switch" id="setFonts"><span class="track" aria-hidden="true"><i></i></span><span class="lbl">App font</span><span class="hint">Off uses your device’s own font.</span></label>
+      </div>
+    </section>
+
+    <section class="set-group" id="setBg" aria-labelledby="setBgTitle">
+      <h3 class="set-title" id="setBgTitle">Background</h3>
+      <div class="set-block set-bare" id="setBgSlot"></div>
+      <div class="set-block set-list">
+        <label class="switch"><input type="checkbox" role="switch" id="setAurora"><span class="track" aria-hidden="true"><i></i></span><span class="lbl">Colour glow</span><span class="hint">Soft moving colour behind the pages.</span></label>
+      </div>
+    </section>
+
+    <section class="set-group" id="setMotion" aria-labelledby="setMotionTitle">
+      <h3 class="set-title" id="setMotionTitle">Motion &amp; effects</h3>
+      <div class="set-block set-pref">
+        <div class="set-pref-text"><span class="set-lbl" id="motionLabel">Motion</span><p class="hint">Calm keeps short fades. Off stops all movement.</p></div>
+        <div class="seg" role="radiogroup" aria-labelledby="motionLabel">
+          <button type="button" role="radio" aria-checked="true" data-motion-pick="full">Full</button>
+          <button type="button" role="radio" aria-checked="false" data-motion-pick="calm">Calm</button>
+          <button type="button" role="radio" aria-checked="false" data-motion-pick="off">Off</button>
+        </div>
+      </div>
+      <div class="set-block" id="setFxSlot"></div>
+    </section>
+
+    <section class="set-group" id="setDiscover" aria-labelledby="setDiscoverTitle">
+      <h3 class="set-title" id="setDiscoverTitle">Discover</h3>
+      <div class="set-block">
+        <label class="field"><span class="set-lbl">Charts and new music from</span><select id="setRegion"></select></label>
+        <p class="hint">Sets the top songs and new releases on Home.</p>
+      </div>
+    </section>
+
+    <section class="set-group" id="getApp" aria-labelledby="getAppTitle">
+      <h3 class="set-title" id="getAppTitle">Get the app</h3>
+      <div class="ga-grid">
+        <article class="ga-card" data-ga="windows">
+          <div class="ga-head"><b>Windows</b><span class="ga-size"></span></div>
+          <p>Its own window, a Start menu shortcut and media keys. Installs just for you, no admin needed.</p>
+          <div class="ga-actions"><a class="pill hot" data-ga-file="OddlyCleverMusic-Setup.exe" download>Download for Windows</a></div>
+        </article>
+        <article class="ga-card" data-ga="android">
+          <div class="ga-head"><b>Android</b><span class="ga-size"></span></div>
+          <p>The same app on your phone. It isn't on Google Play, so you install the file yourself.</p>
+          <div class="ga-actions"><a class="pill hot" data-ga-file="OddlyCleverMusic.apk" download>Download APK</a><button class="pill" id="gaSend" type="button">Send to my phone</button></div>
+        </article>
+      </div>
+      <div class="ga-share" id="gaShare" hidden>
+        <div class="ga-qr" id="gaQr" role="img" aria-label="QR code for the download link"></div>
+        <div class="ga-how">
+          <b>Scan this with your phone's camera</b>
+          <p class="ga-url" id="gaUrl"></p>
+          <ol>
+            <li>Your phone needs to be on the same Wi-Fi as this PC.</li>
+            <li>Open the link. If Chrome warns about the file, tap <b>Download anyway</b>, then <b>Open</b>.</li>
+            <li>First time only: Android asks to allow installs from this source. Tap <b>Settings</b>, turn on <b>Allow from this source</b>, then go back.</li>
+            <li>Tap <b>Install</b>. If Play Protect asks, tap <b>More details › Install anyway</b>.</li>
+          </ol>
+          <p class="hint" id="gaUntil"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="set-group" id="setUpdates" aria-labelledby="setUpdatesTitle">
+      <h3 class="set-title" id="setUpdatesTitle">Updates &amp; help</h3>
+      <div class="set-block upd-block">
+        <div class="upd-row"><div><span class="set-lbl">App</span><p class="hint" id="updApp">Version</p></div><button class="pill sm" type="button" id="updCheck">Check for updates</button></div>
+        <div class="upd-new" id="updNew" hidden>
+          <b id="updNewTitle"></b>
+          <div class="upd-notes" id="updNotes"></div>
+          <div class="upd-actions">
+            <button class="pill hot" type="button" id="updGet">Download and install</button>
+            <a class="pill hot" id="updLink" target="_blank" rel="noopener" hidden>Download for Windows</a>
+            <a class="pill" id="updPage" target="_blank" rel="noopener">What's new</a>
+          </div>
+          <p class="hint" id="updState" aria-live="polite"></p>
+        </div>
+        <div class="upd-row"><div><span class="set-lbl">Engine</span><p class="hint" id="updEngine">The part that talks to YouTube. It updates itself when YouTube changes.</p></div><button class="pill sm" type="button" id="updEngineBtn">Check now</button></div>
+      </div>
+      <div class="set-block upd-row">
+        <div><span class="set-lbl">Something not working?</span><p class="hint">Copy the details (versions and recent errors, nothing about your music) and paste them into a report.</p></div>
+        <div class="upd-actions"><button class="pill sm" type="button" id="diagCopy">Copy diagnostics</button><a class="pill sm" id="diagReport" href="https://github.com/oddlyclevertools/oddlyclever-spin/issues/new" target="_blank" rel="noopener">Report a problem</a></div>
+      </div>
+    </section>
+
+    <section class="set-group" id="setAbout" aria-labelledby="setAboutTitle">
+      <h3 class="set-title" id="setAboutTitle">About</h3>
+      <div class="set-block set-about">
+        <img src="favicon.svg" alt="" width="40" height="40">
+        <div><b>OddlyClever Spin</b><p class="hint">I make free tools at Oddly Clever. Your music and settings stay on this device. No account, no ads.</p></div>
+        <div class="set-about-btns"><button class="pill sm" type="button" id="setLicences" aria-expanded="false" aria-controls="licBox">Licences</button><button class="pill sm set-keys" type="button" id="setKeys">Keyboard shortcuts</button></div>
+      </div>
+      <div class="set-block lic-box" id="licBox" hidden><p class="hint">Spin is free and open source (MIT). It stands on these projects:</p><pre id="licText"></pre></div>
+    </section>
+  </div>
+</div>
+
+<div class="dlg" id="keys" hidden>
+  <div class="dlg-card" role="dialog" aria-modal="true" aria-labelledby="keysTitle">
+    <header class="dlg-head"><h2 id="keysTitle">Keyboard shortcuts</h2><button class="ico dlg-x" aria-label="Close"></button></header>
+    <section class="dlg-sec">
+      <dl class="keys">
+        <div><dt><kbd>Space</kbd></dt><dd>Play or pause</dd></div>
+        <div><dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Jump back or forward 5 seconds</dd></div>
+        <div><dt><kbd>Shift</kbd> <kbd>←</kbd> <kbd>→</kbd></dt><dd>Previous or next song</dd></div>
+        <div><dt><kbd>↑</kbd> <kbd>↓</kbd></dt><dd>Volume up or down</dd></div>
+        <div><dt><kbd>L</kbd></dt><dd>Like the song that's playing</dd></div>
+        <div><dt><kbd>S</kbd></dt><dd>Shuffle on or off</dd></div>
+        <div><dt><kbd>R</kbd></dt><dd>Repeat: off, all, one song</dd></div>
+        <div><dt><kbd>F</kbd></dt><dd>Open or close Now Playing</dd></div>
+        <div><dt><kbd>Q</kbd></dt><dd>Show Up next</dd></div>
+        <div><dt><kbd>Y</kbd></dt><dd>Show lyrics</dd></div>
+        <div><dt><kbd>/</kbd></dt><dd>Search</dd></div>
+        <div><dt><kbd>Ctrl</kbd> <kbd>K</kbd></dt><dd>Commands (or type <kbd>&gt;</kbd> in search)</dd></div>
+        <div><dt><kbd>Alt</kbd> <kbd>←</kbd> <kbd>→</kbd></dt><dd>Back or forward a page</dd></div>
+        <div><dt><kbd>?</kbd></dt><dd>This list</dd></div>
+        <div><dt><kbd>Esc</kbd></dt><dd>Close whatever is on top</dd></div>
+      </dl>
+    </section>
+  </div>
+</div>
+
+<div class="dlg" id="ask" hidden>
+  <div class="dlg-card dlg-small" role="alertdialog" aria-modal="true" aria-labelledby="askTitle" aria-describedby="askText">
+    <h2 id="askTitle"></h2><p id="askText"></p>
+    <input id="askInput" type="text" autocomplete="off" hidden>
+    <div class="dlg-actions"><button class="pill" type="button" data-ask="cancel">Cancel</button><button class="pill hot" type="button" data-ask="ok">OK</button></div>
+  </div>
+</div>
+
+<div class="menu" id="menu" role="menu" hidden></div>
+<div class="sheet-wrap" id="sheet" hidden>
+  <div class="sheet-scrim" data-sheet-close></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="Options" data-swipe="sheet-down">
+    <div class="sheet-grab" id="sheetGrab" aria-hidden="true"></div>
+    <header class="sheet-head" hidden></header>
+    <div class="sheet-body" role="menu"></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<audio id="audio" preload="auto"></audio>
+<script src="app.js"></script>
+<script src="motion-nav.js"></script>
+<script src="motion-player.js"></script>
+<script src="visualizer.js"></script>
+<script src="scenes.js"></script>
+<script src="effects.js"></script>
+</body>
+</html>

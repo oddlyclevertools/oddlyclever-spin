@@ -1,0 +1,57 @@
+/* visualizer: VISUAL_V4 ideas 7, 8 and 10. visualizer.js sets --vz-r1..6 (the cover's ramp, dark -> light) on <html>. */
+:root { --vz-r1: #001233; --vz-r2: #023e7d; --vz-r3: #0466c8; --vz-r4: #5c677d; --vz-r5: #7d8597; --vz-r6: #979dac; }
+
+/* ---------- ramp bands + canvas inside #npBg; the bands sit under its ::after dimming layer (same z-index, painted first) ---------- */
+.vz-bands, .vz-bands > i, .vz-canvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+/* the canvas draws over the dimming: Pills and Blob fade out above the title, Bands uses the contrast-safe ramp */
+.vz-canvas { z-index: 2; }
+.vz-bands { opacity: .75; }
+html[data-mode="light"] .vz-bands { opacity: .6; }
+html[data-album="off"] .vz-bands { display: none; }
+.vz-bands > i { will-change: clip-path; }
+.vz-canvas { width: 100%; height: 100%; opacity: 0; transition: opacity var(--spring-smooth-ms) var(--spring-smooth); }
+#np.vz-on .vz-canvas { opacity: 1; }
+/* Bands and Blob reach under the title and controls: keep them a soft wash so text stays readable */
+#np.vz-on[data-vz="bands"] .vz-canvas, #np.vz-on[data-vz="blob"] .vz-canvas { opacity: .5; }
+
+/* ---------- top bar: hex pill stack + visualizer pick (top right on a phone, top left on desktop) ---------- */
+.vz-top { position: absolute; z-index: 3; top: 22px; left: 26px; display: flex; align-items: center; gap: 10px; }
+.vz-pills { display: flex; align-items: center; height: 34px; padding: 0 4px; cursor: pointer; }
+.vz-pills button { height: 26px; width: 26px; margin-left: -14px; border-radius: 13px; background: var(--c); box-shadow: -3px 0 6px rgb(0 0 0 / .28);
+  font: 600 11px/1 ui-monospace, "Cascadia Mono", Consolas, monospace; letter-spacing: .02em; overflow: hidden; white-space: nowrap;
+  transition: width var(--spring-snappy-ms) var(--spring-snappy), margin var(--spring-snappy-ms) var(--spring-snappy), transform var(--spring-press-ms) var(--spring-press); }
+.vz-pills button:first-child { margin-left: 0; }
+.vz-pills button span { opacity: 0; transition: opacity var(--spring-snappy-ms) var(--spring-snappy); }
+.vz-pills.open button { width: 74px; margin-left: -6px; }
+.vz-pills.open button:first-child { margin-left: 0; }
+.vz-pills.open button span { opacity: 1; }
+.vz-pills button.vz-copied { animation: fx-pop var(--spring-bouncy-ms) var(--spring-bouncy); }
+.vz-pills button:active { transform: scale(.94); }
+.vz-mode { height: 30px; min-width: 112px; padding: 0 12px; border-radius: var(--r-pill, 999px); background: color-mix(in srgb, var(--bg) 80%, transparent); color: var(--ink); font-size: var(--fs-6); font-weight: 600; }
+.vz-mode::before { content: ""; display: inline-block; width: 12px; height: 10px; margin-right: 7px; vertical-align: -1px;
+  background: linear-gradient(var(--accent) 0 0) 0 100% / 2px 60% no-repeat, linear-gradient(var(--accent) 0 0) 5px 100% / 2px 100% no-repeat, linear-gradient(var(--accent) 0 0) 10px 100% / 2px 40% no-repeat; }
+.vz-mode[data-mode="off"]::before { opacity: .4; }
+@media (max-width: 1024px) {
+  .vz-top { top: calc(var(--safe-t) + 15px); left: auto; right: calc(12px + var(--safe-r)); flex-direction: row-reverse; }
+  #np[data-ptab]:not([data-ptab=now]) .vz-top { display: none; } /* the small header row needs the room */
+  .vz-top { align-items: flex-start; }
+  /* sized to its word so it clears the grab handle in the middle; 44 px tall to the touch */
+  .vz-mode { position: relative; min-width: 0; height: 34px; }
+  .vz-mode::after { content: ""; position: absolute; inset: -5px -4px; }
+  .vz-pills.open { flex-direction: column; align-items: stretch; height: auto; padding: 4px; } /* no room across: fan downwards */
+  .vz-pills.open button, .vz-pills.open button:first-child { width: 84px; height: 28px; margin: -3px 0 0; box-shadow: 0 -3px 6px rgb(0 0 0 / .28); }
+}
+
+/* ---------- lyrics on bands: each line on a soft ramp band; the sung one widens and brightens ---------- */
+#npLyrics .lyr p[data-i] { position: relative; isolation: isolate; padding: .14em .45em; margin-inline: -.45em; }
+#npLyrics .lyr p[data-i]::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: .45em; pointer-events: none;
+  background: color-mix(in srgb, var(--band) 40%, transparent); opacity: .3; transform: scaleX(.9); transform-origin: 0 50%;
+  transition: transform var(--spring-bouncy-ms) var(--spring-bouncy), opacity var(--spring-smooth-ms) var(--spring-smooth); }
+#npLyrics .lyr p.on::before { opacity: 1; transform: none; }
+#npLyrics .lyr p:nth-child(6n+1) { --band: var(--vz-r1); }
+#npLyrics .lyr p:nth-child(6n+2) { --band: var(--vz-r2); }
+#npLyrics .lyr p:nth-child(6n+3) { --band: var(--vz-r3); }
+#npLyrics .lyr p:nth-child(6n+4) { --band: var(--vz-r4); }
+#npLyrics .lyr p:nth-child(6n+5) { --band: var(--vz-r5); }
+#npLyrics .lyr p:nth-child(6n) { --band: var(--vz-r6); }
+html[data-album="off"] #npLyrics .lyr p[data-i]::before { --band: var(--accent); }

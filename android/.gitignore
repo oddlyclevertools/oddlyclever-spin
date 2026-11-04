@@ -1,0 +1,6 @@
+.gradle/
+build/
+app/build/
+local.properties
+# fetched by build.sh (pinned sha256)
+app/src/main/jniLibs/

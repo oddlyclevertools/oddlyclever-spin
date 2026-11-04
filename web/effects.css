@@ -1,0 +1,6 @@
+/* Pixel effects layer (effects.js). Canvases are drawn at art size and scaled by whole device pixels. */
+.pfx-overlay { position: fixed; inset: 0; z-index: 70; pointer-events: none; overflow: hidden; contain: strict; }
+.pfx-scene, .pfx-critters { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.pfx-scene { opacity: .95; }
+html[data-np="open"] .pfx-scene { opacity: .6; }
+.pfx-cv { position: absolute; left: 0; top: 0; image-rendering: pixelated; will-change: transform; }

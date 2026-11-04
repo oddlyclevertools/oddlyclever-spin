@@ -1,0 +1,93 @@
+/* Capsule scenes and live backgrounds (scenes.js). Animations touch transform and opacity only. */
+.scn { --scn-k: 1; position: relative; width: 100%; height: 100%; overflow: hidden; contain: layout paint; isolation: isolate;
+  transition: opacity calc(900ms * var(--dm, 1)) ease; }
+.scn.scn-in { opacity: 0; }
+.scn-capsule { height: auto; aspect-ratio: 1 / 2; border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .1), inset 0 10px 24px rgb(255 255 255 / .06); }
+.scn-capsule::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .1), inset 0 -18px 30px rgb(0 0 0 / .18); }
+.scn-defs { position: absolute; width: 0; height: 0; }
+.scn-p, .scn-l { position: absolute; inset: 0; }
+.scn-l > svg { display: block; width: 100%; height: 100%; }
+.scn-l.scn-tall { top: -100%; }
+.scn-grain { position: absolute; inset: 0; pointer-events: none; background-size: 128px 128px; opacity: .7; }
+
+/* ---------- motion (live scenes only) ---------- */
+html[data-motion="calm"] .scn { --scn-k: 2.6; }
+.scn-live .scn-l[class*="scn-a-"] { will-change: transform, opacity; animation-timing-function: ease-in-out; animation-iteration-count: infinite; animation-direction: alternate; }
+.scn-live .scn-a-tw1 { animation-name: scn-tw1; animation-duration: calc(3.2s * var(--scn-k)); }
+.scn-live .scn-a-tw2 { animation-name: scn-tw2; animation-duration: calc(4.3s * var(--scn-k)); }
+.scn-live .scn-a-aur { animation-name: scn-aur; animation-duration: calc(16s * var(--scn-k)); }
+.scn-live .scn-a-beam { animation-name: scn-beam; animation-duration: calc(6.5s * var(--scn-k)); }
+.scn-live .scn-a-shim { animation-name: scn-shim; animation-duration: calc(2.8s * var(--scn-k)); }
+.scn-live .scn-a-pulse { animation-name: scn-pulse; animation-duration: calc(4s * var(--scn-k)); }
+.scn-live .scn-a-drift { animation-name: scn-drift; animation-duration: calc(38s * var(--scn-k)); }
+.scn-live .scn-a-drift2 { animation-name: scn-drift; animation-duration: calc(52s * var(--scn-k)); animation-delay: -20s; }
+.scn-live .scn-a-smoke { animation-name: scn-smoke; animation-duration: calc(4.6s * var(--scn-k)); }
+.scn-live .scn-a-blink { animation-name: scn-blink; animation-duration: 1.4s; }
+.scn-live .scn-a-spin { animation: scn-spin calc(22s * var(--scn-k)) linear infinite; }
+.scn-live .scn-a-snow { animation: scn-snow calc(26s * var(--scn-k)) linear infinite; }
+.scn-live .scn-a-shoot { opacity: 0; animation: scn-shoot calc(11s * var(--scn-k)) ease-out infinite; }
+.scn-paused .scn-l { animation-play-state: paused !important; }
+html[data-motion="off"] .scn-live .scn-a-shoot { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  html[data-motion-src="os"] .scn-live .scn-l { animation: none !important; }
+}
+@keyframes scn-tw1 { from { opacity: 1; } to { opacity: .3; } }
+@keyframes scn-tw2 { from { opacity: .3; } to { opacity: 1; } }
+@keyframes scn-aur { from { transform: translateX(-4%) scaleY(.92); opacity: .7; } to { transform: translateX(4%) scaleY(1.08); opacity: 1; } }
+@keyframes scn-beam { from { transform: rotate(-15deg); opacity: .65; } to { transform: rotate(15deg); opacity: 1; } }
+@keyframes scn-shim { from { transform: translateX(-6px); opacity: .45; } to { transform: translateX(6px); opacity: 1; } }
+@keyframes scn-pulse { from { transform: scale(.94); opacity: .75; } to { transform: scale(1.06); opacity: 1; } }
+@keyframes scn-drift { from { transform: translateX(-5%); } to { transform: translateX(5%); } }
+@keyframes scn-smoke { from { transform: translate(0, 0); opacity: .9; } to { transform: translate(4px, -12px); opacity: .35; } }
+@keyframes scn-blink { from { opacity: 1; } 40% { opacity: 1; } to { opacity: .15; } }
+@keyframes scn-spin { to { transform: rotate(360deg); } }
+@keyframes scn-snow { from { transform: translateY(0); } to { transform: translateY(50%); } }
+@keyframes scn-shoot { 0%, 78% { transform: translate(0, 0); opacity: 0; } 81% { opacity: 1; } 90%, 100% { transform: translate(-150px, 82px); opacity: 0; } }
+
+/* ---------- live background: a fixed layer behind the app, with a scrim so panels stay readable ---------- */
+/* z-index 1 and first in <body>: above fx.js's #fxAurora layer (z 0), still under .app (z 1, later in the DOM) */
+.scn-bg { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; background: var(--bg); }
+.scn-stage { position: absolute; inset: -48px; }
+.scn-stage > .scn { position: absolute; inset: 0; }
+/* each live scene carries its own scrim: a separate scrim layer let a freshly drawn scene show above it, unscrimmed, for
+   a frame or two in Android WebView */
+.scn-stage > .scn::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: color-mix(in srgb, var(--bg) 52%, transparent); }
+html[data-mode="light"] .scn-stage > .scn::after { background: color-mix(in srgb, var(--bg) 66%, transparent); }
+html[data-scene][data-theme] main { background: color-mix(in srgb, var(--panel) 72%, transparent); }  /* [data-theme] outranks the palette themes' own main background */
+/* a live scene replaces theme-studio's scroll tint on Home (its animation would repaint main over the scene) */
+html[data-scene][data-palette][data-view] main { animation: none; }
+html[data-scene][data-theme="glasshouse"] main { background: color-mix(in srgb, var(--panel) 30%, transparent); }
+@media (max-width: 1024px) {
+  html[data-scene][data-theme] main, html[data-scene][data-theme] .top { background: transparent; }
+  html[data-scene][data-theme] .app.mn-scrolled .top { background: color-mix(in srgb, var(--bg) 78%, transparent);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4); }
+  /* calmer behind text: the scene still shows, the rows and labels stay clear */
+  html[data-scene] .scn-stage > .scn::after { background: linear-gradient(color-mix(in srgb, var(--bg) 64%, transparent), color-mix(in srgb, var(--bg) 50%, transparent) 70%, color-mix(in srgb, var(--bg) 70%, transparent)); }
+  html[data-scene][data-mode="light"] .scn-stage > .scn::after { background: color-mix(in srgb, var(--bg) 72%, transparent); }
+}
+/* Now Playing: scenes.js puts its own copy in #npBg (it rides the sheet) wearing the song's colours. The page's layer
+   keeps one z-index; it rests while the player covers it. */
+.scn-np { position: absolute; inset: 0; overflow: hidden; }
+.scn-np .scn::after { opacity: .4; }
+/* the scene covers fx.js's aurora completely: drop its two full-screen layers (phones ran short of GPU tile memory) */
+html[data-scene] #fxAurora { display: none; }
+html[data-scene] .np-bg { background: transparent !important; }
+html[data-scene] .np-bg > div.fx-layer { opacity: .35; }
+html[data-scene] .np-bg i.fx-layer { opacity: .18; }
+
+/* ---------- picker (settings) ---------- */
+.scn-grid { display: flex; gap: 4px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none;
+  margin: -4px calc(-1 * var(--pr, 0px)) 0 calc(-1 * var(--pl, 0px)); padding: 4px var(--pr, 0px) 4px var(--pl, 0px); scroll-padding-inline: var(--pl, 0px); }
+.scn-grid::-webkit-scrollbar { display: none; }
+.scn-grid > button { flex: none; width: 72px; display: grid; justify-items: center; gap: 8px; padding: 6px 2px 8px; border-radius: 14px; color: var(--dim); scroll-snap-align: start; }
+.scn-grid > button:hover { color: var(--ink); background: var(--fill); }
+.scn-grid > button:focus-visible { outline: 2px solid var(--ink); outline-offset: 0; }
+.scn-grid > button[aria-checked="true"] { color: var(--ink); }
+.scn-grid > button[aria-checked="true"] .scn-name { font-weight: 650; }
+.scn-thumb { display: block; width: 44px; aspect-ratio: 1 / 2; border-radius: 999px; transition: transform var(--t160, 160ms) var(--spring-snappy, ease); }
+.scn-grid > button:active .scn-thumb { transform: scale(.94); }
+.scn-grid > button[aria-checked="true"] .scn-thumb { box-shadow: 0 0 0 2px var(--panel, var(--bg)), 0 0 0 4px var(--ink); }
+.scn-thumb-off { box-shadow: inset 0 0 0 1.5px var(--line); background: linear-gradient(to top right, transparent calc(50% - 1px), var(--line) 50%, transparent calc(50% + 1px)); }
+.scn-name { font-size: var(--fs-6, 12px); line-height: 1.25; text-align: center; }

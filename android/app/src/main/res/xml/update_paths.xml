@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Only the downloaded update APK is shared, with the system installer (MainActivity.installUpdate). -->
+<paths>
+    <external-files-path name="update" path="Music/OddlyClever Music/.cache/update/" />
+    <files-path name="update_int" path="OddlyClever Music/.cache/update/" />
+</paths>
